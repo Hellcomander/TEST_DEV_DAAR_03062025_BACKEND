@@ -7,16 +7,19 @@ using TEST_DEV_DAAR_03062025.Utils;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text;
+using TEST_DEV_DAAR_03062025.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TEST_DEV_DAAR_03062025.Controllers
 {
     [ApiController]
     [Route("user")]
 
-    public class UserController(ApplicationDbContext context, IConfiguration configuration) : ControllerBase
+    public class UserController(ApplicationDbContext context, IConfiguration configuration, JwtService jwtService) : ControllerBase
     {
         private readonly ApplicationDbContext _context = context;
         private readonly IConfiguration _configuration = configuration;
+        private readonly JwtService _jwtService = jwtService;
 
         private async Task<ActionResult<User>> GetUsuario(int id)
         {
@@ -29,6 +32,7 @@ namespace TEST_DEV_DAAR_03062025.Controllers
         }
 
         // POST: user
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser([FromBody] UserCreateDto usuario)
         {
@@ -53,6 +57,7 @@ namespace TEST_DEV_DAAR_03062025.Controllers
         }
 
         // POST: user/login
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<User>> Login([FromBody] LoginDto authData)
         {
@@ -78,9 +83,11 @@ namespace TEST_DEV_DAAR_03062025.Controllers
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var jsonDoc = JsonDocument.Parse(jsonResponse);
-            var token = jsonDoc.RootElement.GetProperty("Data").GetString();
+            var tokenToka = jsonDoc.RootElement.GetProperty("Data").GetString();
 
-            return Ok(new { token });
+            var jwt = _jwtService.GenerateToken(user);
+
+            return Ok(new { tokenToka,  accessToken = jwt});
         }
     }
 }

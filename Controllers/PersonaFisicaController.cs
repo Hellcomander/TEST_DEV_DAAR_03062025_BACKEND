@@ -4,6 +4,7 @@ using TEST_DEV_DAAR_03062025.Data;
 using TEST_DEV_DAAR_03062025.Dto;
 using TEST_DEV_DAAR_03062025.Models;
 using TEST_DEV_DAAR_03062025.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TEST_DEV_DAAR_03062025.Controllers
 {
@@ -14,6 +15,7 @@ namespace TEST_DEV_DAAR_03062025.Controllers
         private readonly ApplicationDbContext _context = context;
 
         // GET: persona-fisica
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PersonaFisica>>> GetPersonas()
         {
@@ -21,6 +23,7 @@ namespace TEST_DEV_DAAR_03062025.Controllers
         }
 
         // GET: persona-fisica/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<PersonaFisica>> GetPersona(int id)
         {
@@ -33,6 +36,7 @@ namespace TEST_DEV_DAAR_03062025.Controllers
         }
 
         // POST: persona-fisica
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<PersonaFisica>> PostPersona([FromBody] PersonaFisicaCreateDto persona)
         {
@@ -65,6 +69,7 @@ namespace TEST_DEV_DAAR_03062025.Controllers
         }
 
         // PUT: persona-fisica/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPersona(int id, PersonaFisicaUpdateDto persona)
         {
@@ -109,6 +114,7 @@ namespace TEST_DEV_DAAR_03062025.Controllers
         }
 
         // DELETE: persona-fisica/5 (eliminación lógica)
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePersona(int id)
         {
