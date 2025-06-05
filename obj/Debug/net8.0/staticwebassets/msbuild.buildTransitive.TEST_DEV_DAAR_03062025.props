@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../buildMultiTargeting/TEST_DEV_DAAR_03062025.props" />
+</Project>

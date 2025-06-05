@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/TEST_DEV_DAAR_03062025.props" />
+</Project>

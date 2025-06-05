@@ -1,0 +1,6 @@
+@TEST_DEV_DAAR_03062025_HostAddress = http://localhost:5012
+
+GET {{TEST_DEV_DAAR_03062025_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
