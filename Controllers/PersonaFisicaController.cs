@@ -54,7 +54,14 @@ namespace TEST_DEV_DAAR_03062025.Controllers
             _context.PersonasFisicas.Add(nuevaPersona);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPersona), new { id = nuevaPersona.IdPersonaFisica }, persona);
+            return CreatedAtAction(nameof(GetPersona), new { id = nuevaPersona.IdPersonaFisica }, new {
+                idPersonaFisica = nuevaPersona.IdPersonaFisica,
+                nombre = nuevaPersona.Nombre,
+                apellidoPaterno = nuevaPersona.ApellidoPaterno,
+                apellidoMaterno = nuevaPersona.ApellidoMaterno,
+                rfc = nuevaPersona.RFC,
+                fechaNacimiento = nuevaPersona.FechaNacimiento,
+            });
         }
 
         // PUT: persona-fisica/5
@@ -64,14 +71,17 @@ namespace TEST_DEV_DAAR_03062025.Controllers
             if (id != persona.IdPersonaFisica)
                 return BadRequest();
 
-            if (await _personaService.ExistePersonaConRFC(persona.RFC)) {
-                return Conflict(new { message = "Ya existe una persona con ese RFC." });
-            }   
-            
             var personaExistente = await _context.PersonasFisicas.FindAsync(id);
 
             if (personaExistente == null || !personaExistente.Activo)
                 return NotFound();
+
+            if (personaExistente.RFC != persona.RFC) {
+                if (await _personaService.ExistePersonaConRFC(persona.RFC))
+                {
+                    return Conflict(new { message = "Ya existe una persona con ese RFC." });
+                }                   
+            }
 
             // Actualizar campos permitidos
             personaExistente.Nombre = persona.Nombre;
